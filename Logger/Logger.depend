@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1598982848 source:c:\data\source\codeblocks\interfacesnew\logger\src\ilogger.cpp
+	"../include/ILogger.h"
+	"LoggerImpl.cpp"
+
+1599569772 c:\data\source\codeblocks\interfacesnew\logger\include\ilogger.h
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+
+1599328779 c:\data\source\codeblocks\interfacesnew\util\returncode.h
+
+1598958155 c:\data\source\codeblocks\interfacesnew\util\export.h
+
+1599569766 c:\data\source\codeblocks\interfacesnew\logger\src\loggerimpl.cpp
+	"../include/ILogger.h"
+	<iostream>
+	<new>
+	<vector>
+	<ctime>
+	<stdio.h>
+	<stdlib.h>
+
+1599569766 source:c:\data\source\codeblocks\interfacesnew\logger\src\loggerimpl.cpp
+	"../include/ILogger.h"
+	<iostream>
+	<new>
+	<vector>
+	<ctime>
+	<stdio.h>
+	<stdlib.h>
+

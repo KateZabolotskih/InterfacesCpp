@@ -1,0 +1,42 @@
+# depslib dependency file v1.0
+1599223022 source:c:\data\source\codeblocks\interfacesnew\set\src\setimpl.cpp
+	"../include/ISet.h"
+	<stdlib.h>
+	<cmath>
+	<vector>
+	<new>
+
+1599035658 c:\data\source\codeblocks\interfacesnew\set\include\iset.h
+	"../../Logger/include/ILogger.h"
+	"../../Vector/include/IVector.h"
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+	<cstddef>
+
+1599070526 c:\data\source\codeblocks\interfacesnew\logger\include\ilogger.h
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+
+1599223112 c:\data\source\codeblocks\interfacesnew\util\returncode.h
+
+1598958155 c:\data\source\codeblocks\interfacesnew\util\export.h
+
+1599068143 c:\data\source\codeblocks\interfacesnew\vector\include\ivector.h
+	"../../Logger/include/ILogger.h"
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+	<cstddef>
+
+1599222990 source:c:\data\source\codeblocks\interfacesnew\set\src\iset.cpp
+	"../include/ISet.h"
+	"SetImpl.cpp"
+	<new>
+	<cmath>
+
+1599223022 c:\data\source\codeblocks\interfacesnew\set\src\setimpl.cpp
+	"../include/ISet.h"
+	<stdlib.h>
+	<cmath>
+	<vector>
+	<new>
+

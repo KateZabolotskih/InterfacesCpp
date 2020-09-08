@@ -1,0 +1,33 @@
+# depslib dependency file v1.0
+1599222957 source:c:\data\source\codeblocks\interfacesnew\vector\src\ivector.cpp
+	"../include/IVector.h"
+	"VectorImpl.cpp"
+	<cstring>
+	<cmath>
+	<new>
+	<assert.h>
+
+1599068143 c:\data\source\codeblocks\interfacesnew\vector\include\ivector.h
+	"../../Logger/include/ILogger.h"
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+	<cstddef>
+
+1599070526 c:\data\source\codeblocks\interfacesnew\logger\include\ilogger.h
+	"../../Util/ReturnCode.h"
+	"../../Util/Export.h"
+
+1599223112 c:\data\source\codeblocks\interfacesnew\util\returncode.h
+
+1598958155 c:\data\source\codeblocks\interfacesnew\util\export.h
+
+1598965981 c:\data\source\codeblocks\interfacesnew\vector\src\vectorimpl.cpp
+	"../include/IVector.h"
+	<stdlib.h>
+	<cmath>
+
+1598965981 source:c:\data\source\codeblocks\interfacesnew\vector\src\vectorimpl.cpp
+	"../include/IVector.h"
+	<stdlib.h>
+	<cmath>
+

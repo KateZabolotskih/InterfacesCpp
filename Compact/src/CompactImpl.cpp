@@ -233,12 +233,10 @@ static ICompact::Iterator* createIterator(IVector const* _begin, IVector const* 
     size_t dim = begin->getDim();
     std::vector<size_t> direction(dim);
     for (size_t i = 0; i < dim; ++i) {
-        // direction is 0..dim-1 for direct  traversal (from begin to end)
-        // direction is dim-1..0 for reverse traversal (from end to begin)
-        if (traversal)
+        // if (traversal)
             direction[i] = i;
-        else
-            direction[i] = dim - 1 - i;
+        // else
+        //     direction[i] = dim - 1 - i;
     }
 
     ICompact::Iterator* iterator = new(std::nothrow) CompactImpl::IteratorImpl(begin, end, step, direction, traversal);
@@ -260,7 +258,10 @@ ICompact::Iterator* CompactImpl::end(IVector const* temp) {
 }
 
 CompactImpl::CompactImpl(IVector const* begin, IVector const* end, double tolerance) :
-    m_dim(begin->getDim()), m_begin(begin->clone()), m_end(end->clone()), m_tolerance(tolerance) {
+    m_dim(begin->getDim()),
+    m_begin(begin->clone()),
+    m_end(end->clone()),
+    m_tolerance(tolerance) {
     m_logger = ILogger::createLogger(this);
     }
 
@@ -312,7 +313,6 @@ ReturnCode CompactImpl::contains(IVector const* vec, bool& result) const {
 }
 
 ReturnCode CompactImpl::isSubset(ICompact const* other, bool& result) const {
-    result = false;
     if (other == nullptr) {
         LOG(m_logger, ReturnCode::RC_NULL_PTR);
         return ReturnCode::RC_NULL_PTR;
@@ -323,42 +323,20 @@ ReturnCode CompactImpl::isSubset(ICompact const* other, bool& result) const {
         return ReturnCode::RC_WRONG_DIM;
     }
 
-    bool containsFlag = false;
-    ReturnCode rc = ReturnCode::RC_SUCCESS;
-
-    IVector* temp = nullptr;
-
-    temp = other->getBegin();
-    if (temp == nullptr) {
-        LOG(m_logger, ReturnCode::RC_UNKNOWN);
-        return ReturnCode::RC_UNKNOWN;
-    }
-    rc = contains(temp, containsFlag);
+    ReturnCode rc = other->contains(m_begin, result);
     if (rc != ReturnCode::RC_SUCCESS) {
-        LOG(m_logger, rc);
         return rc;
     }
-    delete temp;
-    temp = nullptr;
 
-    if (!containsFlag) {
+    if (!result) {
         return ReturnCode::RC_SUCCESS;
     }
 
-    temp = other->getEnd();
-    if (temp == nullptr) {
-        LOG(m_logger, ReturnCode::RC_UNKNOWN);
-        return ReturnCode::RC_UNKNOWN;
-    }
-    rc = contains(temp, containsFlag);
+    rc = other->contains(m_end, result);
     if (rc != ReturnCode::RC_SUCCESS) {
-        LOG(m_logger, rc);
         return rc;
     }
-    delete temp;
-    temp = nullptr;
 
-    result = containsFlag;
     return ReturnCode::RC_SUCCESS;
 }
 

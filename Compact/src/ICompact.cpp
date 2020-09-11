@@ -111,7 +111,7 @@ ICompact* ICompact::_union(ICompact const* comp1, ICompact const* comp2, double 
 
     bool subsetFlag = false;
 
-    rc = comp1->isSubset(comp2, subsetFlag);
+    rc = comp2->isSubset(comp1, subsetFlag);
     if (rc == ReturnCode::RC_SUCCESS && subsetFlag) {
         ICompact* result = comp1->clone();
         if (result == nullptr) {
@@ -121,7 +121,7 @@ ICompact* ICompact::_union(ICompact const* comp1, ICompact const* comp2, double 
         return result;
     }
 
-    rc = comp2->isSubset(comp1, subsetFlag);
+    rc = comp1->isSubset(comp2, subsetFlag);
     if (rc == ReturnCode::RC_SUCCESS && subsetFlag) {
         ICompact* result = comp2->clone();
         if (result == nullptr) {

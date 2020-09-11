@@ -156,18 +156,18 @@ bool testICompact(bool useLogger) {
 		comp3_1->getDim() == 3 &&
 		comp3_2->getDim() == 3);
 
-	IVector const* get_vec1_beg_1 = comp1_1->getBegin();
-	IVector const* get_vec1_end_1 = comp1_1->getEnd();
-	IVector const* get_vec1_beg_2 = comp1_2->getBegin();
-	IVector const* get_vec1_end_2 = comp1_2->getEnd();
-	IVector const* get_vec2_beg_1 = comp2_1->getBegin();
-	IVector const* get_vec2_end_1 = comp2_1->getEnd();
-	IVector const* get_vec2_beg_2 = comp2_2->getBegin();
-	IVector const* get_vec2_end_2 = comp2_2->getEnd();
-	IVector const* get_vec3_beg_1 = comp3_1->getBegin();
-	IVector const* get_vec3_end_1 = comp3_1->getEnd();
-	IVector const* get_vec3_beg_2 = comp3_2->getBegin();
-	IVector const* get_vec3_end_2 = comp3_2->getEnd();
+	IVector* get_vec1_beg_1 = comp1_1->getBegin();
+	IVector* get_vec1_end_1 = comp1_1->getEnd();
+	IVector* get_vec1_beg_2 = comp1_2->getBegin();
+	IVector* get_vec1_end_2 = comp1_2->getEnd();
+	IVector* get_vec2_beg_1 = comp2_1->getBegin();
+	IVector* get_vec2_end_1 = comp2_1->getEnd();
+	IVector* get_vec2_beg_2 = comp2_2->getBegin();
+	IVector* get_vec2_end_2 = comp2_2->getEnd();
+	IVector* get_vec3_beg_1 = comp3_1->getBegin();
+	IVector* get_vec3_end_1 = comp3_1->getEnd();
+	IVector* get_vec3_beg_2 = comp3_2->getBegin();
+	IVector* get_vec3_end_2 = comp3_2->getEnd();
 
 	IVector::Norm norm = IVector::Norm::NORM_2;
 
@@ -213,18 +213,18 @@ bool testICompact(bool useLogger) {
 	ICompact* clone_1 = comp1_1->clone();
 	ICompact* clone_2 = comp2_1->clone();
 	ICompact* clone_3 = comp3_1->clone();
-	IVector const* temp1 = clone_1->getBegin();
-	IVector const* temp2 = comp1_1->getBegin();
-	IVector const* temp3 = clone_2->getBegin();
-	IVector const* temp4 = comp2_1->getBegin();
-	IVector const* temp5 = clone_3->getBegin();
-	IVector const* temp6 = comp3_1->getBegin();
-	IVector const* temp07 = clone_1->getEnd();
-	IVector const* temp08 = comp1_1->getEnd();
-	IVector const* temp09 = clone_2->getEnd();
-	IVector const* temp10 = comp2_1->getEnd();
-	IVector const* temp11 = clone_3->getEnd();
-	IVector const* temp12 = comp3_1->getEnd();
+	IVector* temp1 = clone_1->getBegin();
+	IVector* temp2 = comp1_1->getBegin();
+	IVector* temp3 = clone_2->getBegin();
+	IVector* temp4 = comp2_1->getBegin();
+	IVector* temp5 = clone_3->getBegin();
+	IVector* temp6 = comp3_1->getBegin();
+	IVector* temp07 = clone_1->getEnd();
+	IVector* temp08 = comp1_1->getEnd();
+	IVector* temp09 = clone_2->getEnd();
+	IVector* temp10 = comp2_1->getEnd();
+	IVector* temp11 = clone_3->getEnd();
+	IVector* temp12 = comp3_1->getEnd();
 	assert(temp1 != nullptr);
 	assert(temp2 != nullptr);
 	assert(temp3 != nullptr);
@@ -260,18 +260,18 @@ bool testICompact(bool useLogger) {
 		IVector::equals(temp11, temp12, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
-	temp1 = nullptr;
-	temp2 = nullptr;
-	temp3 = nullptr;
-	temp4 = nullptr;
-	temp5 = nullptr;
-	temp6 = nullptr;
-	temp07 = nullptr;
-	temp08 = nullptr;
-	temp09 = nullptr;
-	temp10 = nullptr;
-	temp11 = nullptr;
-	temp12 = nullptr;
+	delete temp1; 
+	delete temp2; 
+	delete temp3; 
+	delete temp4; 
+	delete temp5; 
+	delete temp6; 
+	delete temp07;
+	delete temp08;
+	delete temp09;
+	delete temp10;
+	delete temp11;
+	delete temp12;
 
 	double* contains_data1_beg_1 = new(std::nothrow) double[dim1];
 	double* contains_data1_end_1 = new(std::nothrow) double[dim1];
@@ -436,12 +436,12 @@ bool testICompact(bool useLogger) {
 	bool flag_not_subset_1 = false;
 	bool flag_not_subset_2 = false;
 	bool flag_not_subset_3 = false;
-	rc1_1 = comp1_1->isSubset(subset_comp1_1 , flag_subset_1);
-	rc2_1 = comp2_1->isSubset(subset_comp2_1 , flag_subset_2);
-	rc3_1 = comp3_1->isSubset(subset_comp3_1 , flag_subset_3);
-	rc1_2 = comp1_1->isSubset(not_subset_comp1_1, flag_not_subset_1);
-	rc2_2 = comp2_1->isSubset(not_subset_comp2_1, flag_not_subset_2);
-	rc3_2 = comp3_1->isSubset(not_subset_comp3_1, flag_not_subset_3);
+	rc1_1 = subset_comp1_1->isSubset(comp1_1, flag_subset_1);
+	rc2_1 = subset_comp2_1->isSubset(comp2_1, flag_subset_2);
+	rc3_1 = subset_comp3_1->isSubset(comp3_1, flag_subset_3);
+	rc1_2 = not_subset_comp1_1->isSubset(comp1_1, flag_not_subset_1);
+	rc2_2 = not_subset_comp2_1->isSubset(comp2_1, flag_not_subset_2);
+	rc3_2 = not_subset_comp3_1->isSubset(comp3_1, flag_not_subset_3);
 	outputTest("isSubset",
 		rc1_1 == ReturnCode::RC_SUCCESS &&
 		rc1_2 == ReturnCode::RC_SUCCESS &&
@@ -886,18 +886,18 @@ bool testICompact(bool useLogger) {
 		IVector::equals(temp6, temp12, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS  &&
 		res == true,
 		true);
-	temp1 = nullptr;
-	temp2 = nullptr;
-	temp3 = nullptr;
-	temp4 = nullptr;
-	temp5 = nullptr;
-	temp6 = nullptr;
-	temp07 = nullptr;
-	temp08 = nullptr;
-	temp09 = nullptr;
-	temp10 = nullptr;
-	temp11 = nullptr;
-	temp12 = nullptr;
+	delete temp1;
+	delete temp2;
+	delete temp3;
+	delete temp4;
+	delete temp5;
+	delete temp6;
+	delete temp07;
+	delete temp08;
+	delete temp09;
+	delete temp10;
+	delete temp11;
+	delete temp12;
 
 	std::vector<size_t> dir_1(dim1);
 	std::vector<size_t> dir_2(dim2);
@@ -943,42 +943,42 @@ bool testICompact(bool useLogger) {
 		it_end_2->doStep() == ReturnCode::RC_SUCCESS &&
 		it_end_3->doStep() == ReturnCode::RC_SUCCESS);
 
-	temp1 = it_1->getPoint();
-	temp2 = it_2->getPoint();
-	temp3 = it_3->getPoint();
-	temp4 = it_end_1->getPoint();
-	temp5 = it_end_2->getPoint();
-	temp6 = it_end_3->getPoint();
-	assert(temp1 != nullptr);
-	assert(temp2 != nullptr);
-	assert(temp3 != nullptr);
-	assert(temp4 != nullptr);
-	assert(temp5 != nullptr);
-	assert(temp6 != nullptr);
+	// temp1 = it_1->getPoint();
+	// temp2 = it_2->getPoint();
+	// temp3 = it_3->getPoint();
+	// temp4 = it_end_1->getPoint();
+	// temp5 = it_end_2->getPoint();
+	// temp6 = it_end_3->getPoint();
+	// assert(temp1 != nullptr);
+	// assert(temp2 != nullptr);
+	// assert(temp3 != nullptr);
+	// assert(temp4 != nullptr);
+	// assert(temp5 != nullptr);
+	// assert(temp6 != nullptr);
 
-	double eps = 1e-3;
+	// double eps = 1e-3;
+	// outputTest("Iterator::doStep",
+	// 	std::fabs(temp1->getCoord(0) - step) < eps &&
+	// 	std::fabs(temp2->getCoord(0) - step) < eps &&
+	// 	temp2->getCoord(1) == 0.0 &&
+	// 	std::fabs(temp3->getCoord(0) - step) < eps &&
+	// 	temp3->getCoord(1) == 0.0 &&
+	// 	temp3->getCoord(2) == 0.0);
 
-	outputTest("Iterator::doStep",
-		std::fabs(temp1->getCoord(0) - step) < eps &&
-		std::fabs(temp2->getCoord(0) - step) < eps &&
-		temp2->getCoord(1) == 0.0 &&
-		std::fabs(temp3->getCoord(0) - step) < eps &&
-		temp3->getCoord(1) == 0.0 &&
-		temp3->getCoord(2) == 0.0);
-
-	outputTest("Iterator::doStep",
-		std::fabs(temp4->getCoord(0) - (1.0 - step)) < eps &&
-		std::fabs(temp5->getCoord(1) - (1.0 - step)) < eps &&
-		temp5->getCoord(0) == 1.0 &&
-		std::fabs(temp6->getCoord(2) - (1.0 - step)) < eps &&
-		temp6->getCoord(1) == 1.0 &&
-		temp6->getCoord(0) == 1.0);
-	temp1 = nullptr;
-	temp2 = nullptr;
-	temp3 = nullptr;
-	temp4 = nullptr;
-	temp5 = nullptr;
-	temp6 = nullptr;
+	// outputTest("Iterator::doStep",
+	// 	std::fabs(temp4->getCoord(0) - (1.0 - step)) < eps &&
+	// 	std::fabs(temp5->getCoord(1) - (1.0 - step)) < eps &&
+	// 	temp5->getCoord(0) == 1.0 &&
+	// 	std::fabs(temp6->getCoord(2) - (1.0 - step)) < eps &&
+	// 	temp6->getCoord(1) == 1.0 &&
+	// 	temp6->getCoord(0) == 1.0);
+	
+	// delete temp1;
+	// delete temp2;
+	// delete temp3;
+	// delete temp4;
+	// delete temp5;
+	// delete temp6;
 
 	ReturnCode step_rc;
 
@@ -1004,42 +1004,79 @@ bool testICompact(bool useLogger) {
 	// }
 	// std::cout << "\n steps:" << steps << '\n';
 
+	temp1 = comp1_1->getEnd();
+	temp2 = comp2_1->getEnd();
+	temp3 = comp3_1->getEnd();
+	temp4 = comp1_1->getBegin();
+	temp5 = comp2_1->getBegin();
+	temp6 = comp3_1->getBegin();
+	assert(temp1 != nullptr);
+	assert(temp2 != nullptr);
+	assert(temp3 != nullptr);
+	assert(temp4 != nullptr);
+	assert(temp5 != nullptr);
+	assert(temp6 != nullptr);
+
 	while ((step_rc = it_1->doStep()) == ReturnCode::RC_SUCCESS);
+	temp07 = it_1->getPoint();
+	assert(temp07 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS 																			 &&
-		IVector::equals(comp1_1->getEnd(), it_1->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp1, temp07, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
 	while ((step_rc = it_2->doStep()) == ReturnCode::RC_SUCCESS);
+	temp08 = it_2->getPoint();
+	assert(temp08 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS 																			 &&
-		IVector::equals(comp2_1->getEnd(), it_2->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp2, temp08, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
 	while ((step_rc = it_3->doStep()) == ReturnCode::RC_SUCCESS);
+	temp09 = it_3->getPoint();
+	assert(temp09 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS																			 &&
-		IVector::equals(comp3_1->getEnd(), it_3->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp3, temp09, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
 	while ((step_rc = it_end_1->doStep()) == ReturnCode::RC_SUCCESS);
+	temp10 = it_end_1->getPoint();
+	assert(temp10 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS																				   &&
-		IVector::equals(comp1_1->getBegin(), it_end_1->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp4, temp10, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
 	while ((step_rc = it_end_2->doStep()) == ReturnCode::RC_SUCCESS);
+	temp11 = it_end_2->getPoint();
+	assert(temp11 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS 																				   &&
-		IVector::equals(comp2_1->getBegin(), it_end_2->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp5, temp11, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
 	while ((step_rc = it_end_3->doStep()) == ReturnCode::RC_SUCCESS);
+	temp12 = it_end_3->getPoint();
+	assert(temp12 != nullptr);
 	outputTest("Iterator::doStep",
 		step_rc != ReturnCode::RC_SUCCESS 																				   &&
-		IVector::equals(comp3_1->getBegin(), it_end_3->getPoint(), norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
+		IVector::equals(temp6, temp12, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
+	delete temp1;
+	delete temp2;
+	delete temp3;
+	delete temp4;
+	delete temp5;
+	delete temp6;
+	delete temp07;
+	delete temp08;
+	delete temp09;
+	delete temp10;
+	delete temp11;
+	delete temp12;
 
 	delete[] step_1;
 	delete[] step_2;

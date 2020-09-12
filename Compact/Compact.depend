@@ -1,10 +1,10 @@
 # depslib dependency file v1.0
-1599574202 source:c:\data\source\codeblocks\interfacesnew\compact\src\compactimpl.cpp
+1599931322 source:c:\data\source\codeblocks\interfacesnew\compact\src\compactimpl.cpp
 	"../include/ICompact.h"
 	<cmath>
 	<new>
 
-1599573191 c:\data\source\codeblocks\interfacesnew\compact\include\icompact.h
+1599931246 c:\data\source\codeblocks\interfacesnew\compact\include\icompact.h
 	<cstddef>
 	<vector>
 	"../../Logger/include/ILogger.h"
@@ -12,15 +12,15 @@
 	"../../Util/ReturnCode.h"
 	"../../Util/Export.h"
 
-1599569772 c:\data\source\codeblocks\interfacesnew\logger\include\ilogger.h
+1599576147 c:\data\source\codeblocks\interfacesnew\logger\include\ilogger.h
 	"../../Util/ReturnCode.h"
 	"../../Util/Export.h"
 
-1599328779 c:\data\source\codeblocks\interfacesnew\util\returncode.h
+1599576147 c:\data\source\codeblocks\interfacesnew\util\returncode.h
 
-1598958155 c:\data\source\codeblocks\interfacesnew\util\export.h
+1599576147 c:\data\source\codeblocks\interfacesnew\util\export.h
 
-1599068143 c:\data\source\codeblocks\interfacesnew\vector\include\ivector.h
+1599576147 c:\data\source\codeblocks\interfacesnew\vector\include\ivector.h
 	"../../Logger/include/ILogger.h"
 	"../../Util/ReturnCode.h"
 	"../../Util/Export.h"

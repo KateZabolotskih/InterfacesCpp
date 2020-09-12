@@ -115,8 +115,8 @@ ISet* ISet::intersection(ISet const* set1, ISet const* set2, IVector::Norm norm,
 		rc = set1->get(ref, i);
 		if (ref != nullptr) {
 			size_t ind;
-			if (set2->find(ref, norm, tolerance, ind) == ReturnCode::RC_SUCCESS) {
-				result->erase(ind);
+			if (set2->find(ref, norm, tolerance, ind) != ReturnCode::RC_SUCCESS) {
+				result->erase(ref, norm, tolerance);
 			}
 
 			delete ref;

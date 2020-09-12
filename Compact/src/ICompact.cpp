@@ -1,6 +1,6 @@
 #include "../include/ICompact.h"
 #include "CompactImpl.cpp"
-#include <cmath>    // fabs (C++11)
+#include <cmath>    // fabs (C++11), isnan
 #include <new>      // nothrow
 #include <assert.h> // assert
 
@@ -80,6 +80,16 @@ ICompact* ICompact::createCompact(IVector const* begin, IVector const* end, doub
         return nullptr;
     }
 
+    if (std::isnan(tolerance)) {
+        LOG(logger, ReturnCode::RC_NAN);
+        return nullptr;
+    }
+
+    if (tolerance < 0.0) {
+        LOG(logger, ReturnCode::RC_INVALID_PARAMS);
+        return nullptr;
+    }
+
     // exclude degeneracy of compact
     for (size_t i = 0; i < begin->getDim(); ++i) {
         if (fabs(begin->getCoord(i) - end->getCoord(i)) < tolerance) {
@@ -106,6 +116,16 @@ ICompact* ICompact::_union(ICompact const* comp1, ICompact const* comp2, double 
     ReturnCode rc = checkCompacts(comp1, comp2);
     if (rc != ReturnCode::RC_SUCCESS) {
         LOG(logger, rc);
+        return nullptr;
+    }
+
+    if (std::isnan(tolerance)) {
+        LOG(logger, ReturnCode::RC_NAN);
+        return nullptr;
+    }
+
+    if (tolerance < 0.0) {
+        LOG(logger, ReturnCode::RC_INVALID_PARAMS);
         return nullptr;
     }
 
@@ -136,6 +156,7 @@ ICompact* ICompact::_union(ICompact const* comp1, ICompact const* comp2, double 
     IVector* begin2 = comp2->getBegin();
     IVector* end1   = comp1->getEnd();
     IVector* end2   = comp2->getEnd();
+    // TODO: remove asserts
     assert(begin1 != nullptr);
     assert(begin2 != nullptr);
     assert(end1 != nullptr);
@@ -221,6 +242,16 @@ ICompact* ICompact::intersection(ICompact const* comp1, ICompact const* comp2, d
         return nullptr;
     }
 
+    if (std::isnan(tolerance)) {
+        LOG(logger, ReturnCode::RC_NAN);
+        return nullptr;
+    }
+
+    if (tolerance < 0.0) {
+        LOG(logger, ReturnCode::RC_INVALID_PARAMS);
+        return nullptr;
+    }
+
     bool intersects = false;
     rc = comp1->intersects(comp2, intersects);
     if (rc != ReturnCode::RC_SUCCESS) {
@@ -235,6 +266,7 @@ ICompact* ICompact::intersection(ICompact const* comp1, ICompact const* comp2, d
     IVector* begin2 = comp2->getBegin();
     IVector* end1   = comp1->getEnd();
     IVector* end2   = comp2->getEnd();
+    // TODO: remove asserts
     assert(begin1 != nullptr);
     assert(begin2 != nullptr);
     assert(end1 != nullptr);
@@ -242,8 +274,8 @@ ICompact* ICompact::intersection(ICompact const* comp1, ICompact const* comp2, d
 
     IVector const* begin = (compare(begin1, begin2, tolerance) == VectorComparison::VC_BIGGER) ?
                             begin1 : begin2;
-    IVector const* end   = (compare(end1, end2, tolerance) == VectorComparison::VC_LESSER) ?
-                            end1 : end2;
+    IVector const* end   = (compare(end1, end2, tolerance)     == VectorComparison::VC_LESSER) ?
+                            end1   : end2;
 
     ICompact* compact = ICompact::createCompact(begin, end, tolerance, logger);
 
@@ -262,26 +294,79 @@ ICompact* ICompact::convex(ICompact const* comp1, ICompact const* comp2, double 
         return nullptr;
     }
 
-    IVector* begin1 = comp1->getBegin();
-    IVector* begin2 = comp2->getBegin();
-    IVector* end1   = comp1->getEnd();
-    IVector* end2   = comp2->getEnd();
-    assert(begin1 != nullptr);
-    assert(begin2 != nullptr);
-    assert(end1 != nullptr);
-    assert(end2 != nullptr);
+    if (std::isnan(tolerance)) {
+        LOG(logger, ReturnCode::RC_NAN);
+        return nullptr;
+    }
 
-    IVector const* begin = (compare(begin1, begin2, tolerance) == VectorComparison::VC_LESSER) ?
-                            begin1 : begin2;
-    IVector const* end   = (compare(end1, end2, tolerance) == VectorComparison::VC_BIGGER) ?
-                            end1 : end2;
+    if (tolerance < 0.0) {
+        LOG(logger, ReturnCode::RC_INVALID_PARAMS);
+        return nullptr;
+    }
 
-    ICompact* compact = ICompact::createCompact(begin, end, tolerance, logger);
+    // here I got a lesson:
+    // leave using goto for C, not C++
+    IVector* begin1 = nullptr;
+    IVector* begin2 = nullptr;
+    IVector* end1   = nullptr;
+    IVector* end2   = nullptr;
+    size_t dim      = 0;
+    double* beginData = nullptr;
+    double*   endData = nullptr;
+    IVector* begin    = nullptr;
+    IVector*   end    = nullptr;
+    ICompact* compact = nullptr;
 
-    delete(begin1);
-    delete(begin2);
-    delete(end1);
-    delete(end2);
+    rc = ReturnCode::RC_UNKNOWN;
+    begin1 = comp1->getBegin();
+    if (begin1 == nullptr) goto convex_return;
+    begin2 = comp2->getBegin();
+    if (begin2 == nullptr) goto convex_delete_begin1;
+    end1   = comp1->getEnd();
+    if (end1   == nullptr) goto convex_delete_begin2;
+    end2   = comp2->getEnd();
+    if (end2   == nullptr) goto convex_delete_end1;
 
-    return compact;
+    rc = ReturnCode::RC_NO_MEM;
+    dim = comp1->getDim();
+    beginData = new(std::nothrow) double[dim];
+    if (beginData == nullptr) goto convex_delete_end2;
+    endData   = new(std::nothrow) double[dim];
+    if (endData   == nullptr) goto convex_delete_begin_data;
+    for (size_t i = 0; i < dim; ++i) {
+        beginData[i] = begin1->getCoord(i) < begin2->getCoord(i) ? begin1->getCoord(i) : begin2->getCoord(i);
+          endData[i] =   end1->getCoord(i) >   end2->getCoord(i) ?   end1->getCoord(i) :   end2->getCoord(i);
+    }
+
+    rc = ReturnCode::RC_UNKNOWN;
+    begin = IVector::createVector(dim, beginData, logger);
+    if (begin == nullptr) goto convex_delete_end_data;
+    end = IVector::createVector(dim, endData, logger);
+    if (end   == nullptr) goto convex_delete_begin;
+    compact = ICompact::createCompact(begin, end, tolerance, logger);
+    rc = compact != nullptr ? ReturnCode::RC_SUCCESS : ReturnCode::RC_UNKNOWN;
+
+    delete end;
+convex_delete_begin:
+    delete begin;
+convex_delete_end_data:
+    delete endData;
+convex_delete_begin_data:
+    delete beginData;
+convex_delete_end2:
+    delete end2;
+convex_delete_end1:
+    delete end1;
+convex_delete_begin2:
+    delete begin2;
+convex_delete_begin1:
+    delete begin1;
+convex_return:
+    if (rc != ReturnCode::RC_SUCCESS) {
+        LOG(logger, rc);
+        return nullptr;
+    }
+    else {
+        return compact;
+    }
 }

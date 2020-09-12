@@ -1,6 +1,5 @@
 #include "../include/compact.h"
 #include "../include/test.h"
-
 #ifndef LIB_IMPORT
 #define LIB_IMPORT
 #endif
@@ -260,12 +259,12 @@ bool testICompact(bool useLogger) {
 		IVector::equals(temp11, temp12, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS &&
 		res == true);
 
-	delete temp1; 
-	delete temp2; 
-	delete temp3; 
-	delete temp4; 
-	delete temp5; 
-	delete temp6; 
+	delete temp1;
+	delete temp2;
+	delete temp3;
+	delete temp4;
+	delete temp5;
+	delete temp6;
 	delete temp07;
 	delete temp08;
 	delete temp09;
@@ -556,6 +555,9 @@ bool testICompact(bool useLogger) {
 	ICompact* convex_1 = ICompact::convex(comp1_1, comp1_2, tolerance, logger);
 	ICompact* convex_2 = ICompact::convex(comp2_1, comp2_2, tolerance, logger);
 	ICompact* convex_3 = ICompact::convex(comp3_1, comp3_2, tolerance, logger);
+    assert(convex_1 != nullptr);
+    assert(convex_2 != nullptr);
+    assert(convex_3 != nullptr);
 	temp1 = convex_1->getBegin();
 	temp2 = convex_2->getBegin();
 	temp3 = convex_3->getBegin();
@@ -725,6 +727,7 @@ bool testICompact(bool useLogger) {
 	assert(temp10 != nullptr);
 	assert(temp11 != nullptr);
 	assert(temp12 != nullptr);
+
 	outputTest("union",
 		add_1 != nullptr &&
 		IVector::equals(temp1, temp2, norm, tolerance, res, logger) == ReturnCode::RC_SUCCESS   &&
@@ -824,6 +827,10 @@ bool testICompact(bool useLogger) {
 	// 	it_1 != nullptr &&
 	// 	it_2 != nullptr &&
 	// 	it_3 != nullptr);
+
+    assert(comp1_1 != nullptr);
+    assert(comp2_1 != nullptr);
+    assert(comp3_1 != nullptr);
 
 	ICompact::Iterator* it_end_1 = comp1_1->end(vstep_end_1);
 	ICompact::Iterator* it_end_2 = comp2_1->end(vstep_end_2);
@@ -972,7 +979,7 @@ bool testICompact(bool useLogger) {
 	// 	std::fabs(temp6->getCoord(2) - (1.0 - step)) < eps &&
 	// 	temp6->getCoord(1) == 1.0 &&
 	// 	temp6->getCoord(0) == 1.0);
-	
+
 	// delete temp1;
 	// delete temp2;
 	// delete temp3;

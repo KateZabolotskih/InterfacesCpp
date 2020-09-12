@@ -34,8 +34,8 @@ namespace {
             ~IteratorImpl();
         };
 
-        Iterator* begin(IVector const* step = nullptr) override;
-        Iterator* end(IVector const* step = nullptr)   override;
+        Iterator* begin(IVector const* step) override;
+        Iterator* end(IVector const* step)   override;
 
         ICompact* clone()                                         const override;
         IVector* getBegin()                                       const override;
@@ -233,10 +233,7 @@ static ICompact::Iterator* createIterator(IVector const* _begin, IVector const* 
     size_t dim = begin->getDim();
     std::vector<size_t> direction(dim);
     for (size_t i = 0; i < dim; ++i) {
-        // if (traversal)
-            direction[i] = i;
-        // else
-        //     direction[i] = dim - 1 - i;
+        direction[i] = i;
     }
 
     ICompact::Iterator* iterator = new(std::nothrow) CompactImpl::IteratorImpl(begin, end, step, direction, traversal);

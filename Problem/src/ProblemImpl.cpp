@@ -107,39 +107,47 @@ ReturnCode ProblemImpl::objectiveFunction(double& res, IVector const* args, IVec
 }
 
 bool ProblemImpl::isValidCompact(ICompact const* compact) const {
-    // generally speaking any 2-dimensional compact is valid for specified objective function
-    // but we will limit the domain with square area: |x| <= 100, |y| <= 100
-    if (compact->getDim() == getArgsDim()) {
-        IVector* begin = nullptr;
-        IVector* end   = nullptr;
-        begin = compact->getBegin();
-        if (begin == nullptr) {
-            LOG(m_logger, ReturnCode::RC_NO_MEM);
-            return false;
-        }
-        end = compact->getEnd();
-        if (end == nullptr) {
-            LOG(m_logger, ReturnCode::RC_NO_MEM);
-            delete begin;
-            return false;
-        }
-
-        double begin_x = begin->getCoord(0);
-        double begin_y = begin->getCoord(1);
-        double end_x = end->getCoord(0);
-        double end_y = end->getCoord(1);
-
-        delete begin;
-        delete end;
-
-        if (begin_x >= -100.0 &&
-            begin_y >= -100.0 &&
-            end_x   <=  100.0 &&
-            end_y   <=  100.0)
-            return true;
+    if (compact == nullptr) {
+        LOG(m_logger, ReturnCode::RC_NULL_PTR);
+        return false;
     }
 
-    return false;
+    if (compact->getDim() != getArgsDim()) {
+        return false;
+    }
+
+    // nevermind
+    //    IVector* begin = nullptr;
+    //    IVector* end   = nullptr;
+    //    begin = compact->getBegin();
+    //    if (begin == nullptr) {
+    //        LOG(m_logger, ReturnCode::RC_NO_MEM);
+    //        return false;
+    //    }
+    //    end = compact->getEnd();
+    //    if (end == nullptr) {
+    //        LOG(m_logger, ReturnCode::RC_NO_MEM);
+    //        delete begin;
+    //        return false;
+    //    }
+    //
+    //    double begin_x = begin->getCoord(0);
+    //    double begin_y = begin->getCoord(1);
+    //    double end_x = end->getCoord(0);
+    //    double end_y = end->getCoord(1);
+    //
+    //    delete begin;
+    //    delete end;
+
+    // generally speaking any 2-dimensional compact is valid for specified objective function
+    // but we will limit the domain with square area: |x| <= 100, |y| <= 100
+    //    if (begin_x >= -100.0 &&
+    //        begin_y >= -100.0 &&
+    //        end_x   <=  100.0 &&
+    //        end_y   <=  100.0)
+    //        return true;
+
+    return true;
 }
 
 size_t ProblemImpl::getParamsDim() const {

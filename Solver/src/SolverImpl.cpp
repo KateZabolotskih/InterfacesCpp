@@ -15,7 +15,7 @@ namespace {
     public:
         SolverImpl();
         ~SolverImpl()                                               override;
-        ReturnCode setParams(std::string const& params)             override;
+        ReturnCode setParams(char const* params)                    override;
         ReturnCode setParams(IVector const* params)                 override;
         ReturnCode setProblemParams(IVector const* problemParams)   override;
         ReturnCode setCompact(ICompact const* compact)              override;
@@ -56,7 +56,7 @@ SolverImpl::~SolverImpl() {
     m_logger   = nullptr;
 }
 
-ReturnCode SolverImpl::setParams(std::string const& params) {
+ReturnCode SolverImpl::setParams(char const* params) {
     return ReturnCode::RC_SUCCESS;
 }
 

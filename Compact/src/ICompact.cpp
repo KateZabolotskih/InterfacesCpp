@@ -2,6 +2,7 @@
 #include "CompactImpl.cpp"
 #include <cmath>    // fabs (C++11), isnan
 #include <new>      // nothrow
+#include <algorithm>// min, max
 #include <assert.h> // assert
 
 enum VectorComparison {
@@ -266,16 +267,26 @@ ICompact* ICompact::intersection(ICompact const* comp1, ICompact const* comp2, d
     IVector* begin2 = comp2->getBegin();
     IVector* end1   = comp1->getEnd();
     IVector* end2   = comp2->getEnd();
+
     // TODO: remove asserts
     assert(begin1 != nullptr);
     assert(begin2 != nullptr);
     assert(end1 != nullptr);
     assert(end2 != nullptr);
 
-    IVector const* begin = (compare(begin1, begin2, tolerance) == VectorComparison::VC_BIGGER) ?
-                            begin1 : begin2;
-    IVector const* end   = (compare(end1, end2, tolerance)     == VectorComparison::VC_LESSER) ?
-                            end1   : end2;
+    size_t dim = comp1->getDim();
+    double* data = new(std::nothrow) double[dim]{0};
+    assert(data != nullptr);
+
+    IVector* begin = IVector::createVector(dim, data, logger);
+    IVector* end   = IVector::createVector(dim, data, logger);
+    assert(begin != nullptr);
+    assert(end != nullptr);
+
+    for (size_t i = 0; i < dim; ++i) {
+        begin->setCoord(i, std::max(begin1->getCoord(i), begin2->getCoord(i)));
+        end->setCoord(i, std::min(end1->getCoord(i), end2->getCoord(i)));
+    }
 
     ICompact* compact = ICompact::createCompact(begin, end, tolerance, logger);
 
@@ -283,6 +294,9 @@ ICompact* ICompact::intersection(ICompact const* comp1, ICompact const* comp2, d
     delete(begin2);
     delete(end1);
     delete(end2);
+    delete[] data;
+    delete begin;
+    delete end;
 
     return compact;
 }

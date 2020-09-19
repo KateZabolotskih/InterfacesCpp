@@ -1,6 +1,8 @@
 #include "../include/ICompact.h"
 #include <cmath>    // fabs (C++11)
 #include <new>		// nothrow
+#include <algorithm>// min, max
+#include <assert.h> // assert
 
 namespace {
     /* declaration */
@@ -349,37 +351,25 @@ ReturnCode CompactImpl::intersects(ICompact const* other, bool& result) const {
         return ReturnCode::RC_WRONG_DIM;
     }
 
-    IVector* temp = nullptr;
+    IVector* otherBegin = other->getBegin();
+    IVector* otherEnd   = other->getEnd();
+    
+    // TODO: remove asserts
+    assert(otherBegin != nullptr);
+    assert(otherEnd != nullptr);
+    
+    bool has_intersection = true;
+    for (size_t i = 0; i < m_dim; ++i) {
+        if (std::max(m_begin->getCoord(i), otherBegin->getCoord(i)) > std::min(m_end->getCoord(i), otherEnd->getCoord(i))) {
+            has_intersection = false;
+            break;
+        }
+    }
 
-    temp = other->getBegin();
-    if (temp == nullptr) {
-        LOG(m_logger, ReturnCode::RC_UNKNOWN);
-        return ReturnCode::RC_UNKNOWN;
-    }
-    bool intersectsBegin = false;
-    ReturnCode rc = contains(temp, intersectsBegin);
-    if (rc != ReturnCode::RC_SUCCESS) {
-        LOG(m_logger, rc);
-        return rc;
-    }
-    delete temp;
-    temp = nullptr;
+    delete otherBegin;
+    delete otherEnd;
 
-    temp = other->getEnd();
-    if (temp == nullptr) {
-        LOG(m_logger, ReturnCode::RC_UNKNOWN);
-        return ReturnCode::RC_UNKNOWN;
-    }
-    bool intersectsEnd   = false;
-    rc = contains(temp, intersectsEnd);
-    if (rc != ReturnCode::RC_SUCCESS) {
-        LOG(m_logger, rc);
-        return rc;
-    }
-    delete temp;
-    temp = nullptr;
-
-    result = intersectsBegin || intersectsEnd;
+    result = has_intersection;
     return ReturnCode::RC_SUCCESS;
 }
 

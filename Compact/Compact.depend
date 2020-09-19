@@ -1,8 +1,10 @@
 # depslib dependency file v1.0
-1599931322 source:c:\data\source\codeblocks\interfacesnew\compact\src\compactimpl.cpp
+1600514212 source:c:\data\source\codeblocks\interfacesnew\compact\src\compactimpl.cpp
 	"../include/ICompact.h"
 	<cmath>
 	<new>
+	<algorithm>
+	<assert.h>
 
 1599931246 c:\data\source\codeblocks\interfacesnew\compact\include\icompact.h
 	<cstddef>
